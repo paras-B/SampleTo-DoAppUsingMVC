@@ -1,7 +1,12 @@
-@model IEnumerable<TaskCategory>
+﻿@model IEnumerable<TaskCategory>
 
 @{
     ViewData["Title"] = "Index";
+}
+
+@if (TempData["success"] != null)
+{
+    <h2>@TempData["success"]</h2>
 }
 
 <div class="text-center">
@@ -41,7 +46,7 @@
             @foreach (var obj in Model)
             {
                 <tr>
-                    <td width="50%">
+                    <td width="30%">
                         @obj.TaskName
                     </td>
                     <td width="30%">
@@ -51,12 +56,25 @@
                         @obj.CreatedDateTime
                     </td>
                     <td width="30%">
-                        @obj.CompletedDateTime
+                        @if (@obj.CompletedDateTime < obj.CreatedDateTime)
+                        {
+                            <p>Not Completed</p>
+                        }
+                        else
+                        {
+                            @obj.CompletedDateTime
+                        }
                     </td>
                     <td>
                         <div class="w-75 btn-group" role="group">
                             <a asp-controller="TaskCategory" asp-action="Edit" asp-route-id="@obj.Id"
                                class="btn btn-primary mx-2"> <i class="bi bi-pencil-square"></i> Edit </a>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="w-75 btn-group" role="group">
+                            <a asp-controller="TaskCategory" asp-action="Delete" asp-route-id="@obj.Id"
+                               class="btn btn-primary mx-2"> <i class="bi bi-trash"></i> Delete Task </a>
                         </div>
                     </td>
                 </tr>
@@ -65,4 +83,3 @@
         </tbody>
     </table>
 </div>
-
